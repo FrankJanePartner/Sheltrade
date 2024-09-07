@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>SignUp</title>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Create an Account</h1>
+        <form action="/login" method="POST">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="confirm-password">Confirm Password</label>
+                <input type="password" id="confirm-password" name="confirm-password" required>
+            </div>
+            <div class="form-group1">
+                <button type="submit" class="btn-primary">Log In</button>
+                <p>Already have an account? <a href="login.html">Log in</a></p>
+            </div>
+            <div class="form-group">
+                <div class="google social-signup">
+                    <i class="fa-brands fa-google"></i>
+                    Continue with Google
+                </div>
+                <div class="social-signup">
+                    <i class="fa-brands fa-facebook"></i>
+                    Continue with Facebook
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

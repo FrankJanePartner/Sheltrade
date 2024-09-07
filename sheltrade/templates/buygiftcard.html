@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buy Gift Card</title>
+    <link rel="stylesheet" href="{% static 'css/buygiftcard.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="right">
+                    <div class="logo">
+                        <img src="{% static 'image/21f8e863-750c-4f85-82fe-72ce7ce9bbbb.svg' %}" alt="logo">
+                        <span>Sheltrade</span>
+                    </div>
+                </div>
+                <div class="user-menu">
+                    <a href="">Logout</a>
+                    <a href="" class="help">Help</a>
+                    <i class="setting fas fa-cog"></i>
+                    <i class="notification fas fa-bell"></i>
+                    <img src="{% static 'image/F1.jpg' %}" alt="User Avatar">
+                </div>
+            </div>
+        </header>
+        
+        <div class="main-content">
+            <main class="dashboard-content">
+                <section class="gift-card-management">
+                    <form>
+                        <h2>Select Gift Card Type</h2>
+                        <div class="form-group">
+                            <i class="opened-package fas fa-box-open"></i>
+                            <input type="search" name="" id="" placeholder="Choose a card type">
+                        </div>
+                        <div class="giftcard-image">
+                            <div class="gift-img">
+                                <img src="{% static 'image/amazon.png' %}" alt="Amazon">
+                                <h5>Amazon</h5>
+                                <span>Amazon Gift Card</span>
+                            </div>
+                            <div class="gift-img">
+                                <img src="{% static 'image/itunes.png' %}" alt="Itunes">
+                                <h5>Itunes</h5>
+                                <span>Itunes Gift Card</span>
+                            </div>
+                            <div class="gift-img">
+                                <img src="{% static 'image/gplay.png' %}" alt="Apple">
+                                <h5>Google Play</h5>
+                                <span>Google Play Gift Card</span>
+                            </div>
+                            <div class="gift-img">
+                                <img src="{% static 'image/netflix.png' %}" alt="Google">
+                                <h5>Netflix</h5>
+                                <span>Netflix Gift Card</span>
+                            </div>
+                        </div>
+                        <div class="amount-select">
+                            <label for="card-amount">Select Amount</label>
+                            <div class="amount-range">
+                                <input type="button" value="$10" onclick="selectAmount(10)" class="active">
+                                <input type="button" value="$25" onclick="selectAmount(25)">
+                                <input type="button" value="$50" onclick="selectAmount(50)">
+                                <input type="button" value="Custom" onclick="selectAmount(0)">
+                            </div>
+                            <input type="number" id="card-amount" name="card-amount" placeholder="Enter amount">
+                        </div>
+                        <div class="transaction-summary">
+                            <h2>Transaction Summary</h2>
+                            <p>You are about to buy a gift card</p>
+                            <div class="summary-item">
+                                <h4>card Type:</h4>
+                                <span>Amazon Gift Card</span>
+                            </div>
+                            <div class="summary-item">
+                                <h4>Amount:</h4>
+                                <span>$50</span>
+                            </div>
+                            <div class="summary-item">
+                                <h4>Processing Fee:</h4>
+                                <span>$5</span>
+                            </div>
+                            <div class="summary-item">
+                                <h4>Total:</h4>
+                                <span>$55</span>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-buy">Buy Now</button>
+                    </form>
+                </section>
+                
+            </main>
+        </div>
+    </div>
+</body>
+</html>
