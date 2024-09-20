@@ -1,0 +1,113 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sheltrade - About Us</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/aboutus.css' %}">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Sheltrade</div>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="aboutus.html" class="active">About Us</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#contact">Contact Us</a></li>
+            </ul>
+            <div class="user-actions">
+                <a href="#login" class="btn btn-login">Login</a>
+                <a href="#signup" class="btn btn-signup">Sign Up</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="about-hero">
+            <h1>About Sheltrade</h1>
+            <p>Your trusted partner in digital transactions</p>
+        </section>
+
+        <section id="our-story">
+            <h2>Our Story</h2>
+            <p>Founded in 2020, Sheltrade was born out of a vision to simplify digital transactions for everyone. We started as a small team of fintech enthusiasts and have since grown into a leading platform for gift cards, cryptocurrencies, airtime, and bill payments.</p>
+        </section>
+
+        <section id="mission-vision">
+            <div class="mission">
+                <h2>Our Mission</h2>
+                <p>To provide a secure, user-friendly platform that empowers individuals and businesses to manage their digital transactions effortlessly.</p>
+            </div>
+            <div class="vision">
+                <h2>Our Vision</h2>
+                <p>To become the go-to platform for all digital financial needs, driving innovation in the fintech industry.</p>
+            </div>
+        </section>
+
+        <section id="team">
+            <h2>Meet Our Team</h2>
+            <div class="team-grid">
+                <div class="team-member">
+                    <img src="{% static 'images/team-member-1.jpg' %}" alt="Team Member 1">
+                    <h3>John Doe</h3>
+                    <p>CEO & Co-founder</p>
+                </div>
+                <div class="team-member">
+                    <img src="{% static 'images/team-member-2.jpg' %}" alt="Team Member 2">
+                    <h3>Jane Smith</h3>
+                    <p>CTO & Co-founder</p>
+                </div>
+                <div class="team-member">
+                    <img src="{% static 'images/team-member-3.jpg' %}" alt="Team Member 3">
+                    <h3>Mike Johnson</h3>
+                    <p>Head of Operations</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="values">
+            <h2>Our Core Values</h2>
+            <ul>
+                <li>Innovation</li>
+                <li>Security</li>
+                <li>Customer-Centric</li>
+                <li>Transparency</li>
+                <li>Integrity</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="quick-links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="aboutus.html">About Us</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#contact">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="social-media">
+                <h4>Follow Us</h4>
+                <a href="#" class="social-icon">Facebook</a>
+                <a href="#" class="social-icon">Twitter</a>
+                <a href="#" class="social-icon">Instagram</a>
+                <a href="#" class="social-icon">LinkedIn</a>
+            </div>
+            <div class="contact-info">
+                <h4>Contact Information</h4>
+                <p>Email: info@sheltrade.com</p>
+                <p>Phone: +1 (123) 456-7890</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Sheltrade. All rights reserved.</p>
+            <a href="#terms">Terms of Service</a> | <a href="#privacy">Privacy Policy</a>
+        </div>
+    </footer>
+</body>
+</html>

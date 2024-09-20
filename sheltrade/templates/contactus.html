@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Helpline Solutions</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Contact Us</h1>
+        
+        <section id="support-form">
+            <h2>Support Form</h2>
+            <form action="/submit-inquiry" method="POST">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="btn-primary">Submit Inquiry</button>
+            </form>
+        </section>
+
+        <section id="faq">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-item">
+                <h3>How do I buy airtime?</h3>
+                <p>To buy airtime, navigate to the "Buy Airtime" page, select your network provider, enter the amount, and choose your preferred payment method.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Can I sell gift cards on this platform?</h3>
+                <p>Yes, you can sell gift cards. Go to the "Sell Gift Card" page, select the card type, enter the balance, and choose your payout method.</p>
+            </div>
+            <div class="faq-item">
+                <h3>What payment methods are accepted?</h3>
+                <p>We accept various payment methods including credit/debit cards, bank transfers, and wallet payments.</p>
+            </div>
+        </section>
+
+        <section id="live-chat">
+            <h2>Live Chat Support</h2>
+            <p>Need immediate assistance? Chat with our support team now!</p>
+            <button id="start-chat" class="btn-secondary">Start Live Chat</button>
+        </section>
+
+        <section id="contact-info">
+            <h2>Contact Information</h2>
+            <p>Phone: +1 (555) 123-4567</p>
+            <p>Email: support@helplinesolutions.com</p>
+            <p>Address: 123 Support Street, Helpville, HS 12345</p>
+        </section>
+    </div>
+
+    <script src="{% static 'live-chat.js' %}"></script>
+</body>
+</html>
+
