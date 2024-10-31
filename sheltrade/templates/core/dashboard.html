@@ -1,0 +1,196 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{% static 'core/css/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'core/css/menu.css' %}">
+    <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
+    <link rel="shortcut icon" href="{% static 'core/core/image/Icon.png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+    <link rel='stylesheet' href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="right">
+                    <div id="aside-menu-btn" class="aside-menu-btn aside-control">
+                        <i id="menu-icon" class="fas fa-bars"></i>
+                    </div>
+                    <div class="logo">
+                        <a href="home.html"><img src="{% static 'core/image/Logo.png' %}" alt="Sheltrade Logo"></a>
+                    </div>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="profile.html">Profile</a></li>
+                        <li><a href="/wallet/">Wallets</a></li>
+                        <li><a href="#">Transactions</a></li>
+                    </ul>
+                </nav>
+                <div class="user-menu">
+                    <a href=""><i class="logout -icon ri-logout-box-r-line"></i>Logout</a>
+                    <a href="contactus.html"><i class="help  fas fa-question-circle"></i></a>
+                    <a href=""><i class="setting fas fa-cog"></i></a>
+                    <a href=""><i class="notification fas fa-bell"></i></a>
+                    <a href=""><i class="user fas fa-user"></i> {{ user.username }}</a>
+
+                </div>
+                <div id="menu-btn" class="menu_bar">
+                    <div><span class="menu_span">Hi  {{ user.username }}</span></div>
+                    <div id="menu-icon" class="fas fa-chevron-down"></div>
+                </div>
+                <ul class="accordion_menu">
+                    <li><a class="dropdown_text" href="wallet.html"><i class="wallet  fas fa-wallet"></i> Wallets</a></li>
+                    <li><a class="dropdown_text" href="profile.html"><i class="user fas fa-user"></i> Profile</a></li>
+                    <li><a class="dropdown_text" href="notification.html"><i class="notification fas fa-bell"></i> Notification</a></li>
+                    <li><a class="dropdown_text" href="settings.html"><i class="setting fas fa-cog"></i>  Settings</a></li>
+                    <li><a class="dropdown_text" href="contactus.html"><i class="help  fas fa-question-circle"></i>  Help</a></li>
+                    <li><a class="dropdown_text" href=""><i class="logout -icon ri-logout-box-r-line"></i>Logout</a></li>
+                </ul>
+            </div>
+        </header>
+        
+        <div class="main-content">
+            <aside class="sidebar">
+                <div class="close-aside aside-control" id="asideControlToggle" style="display: none"><i  class="close  fas fa-times"></i></div>
+
+                <ul>
+                    <li><a href="profile.html" class="active"><i class="fas fa-user"></i> Profile</a></li>
+                    <li><a href="/wallet/"><i class="fas fa-wallet"></i> Wallets</a></li>
+                    <li><a href="/dashboard/"><i class="fas fa-exchange-alt"></i> Transact</a></li>
+                    <li><a href="/giftcard/"><i class="fas fa-gift"></i> Buy gift</a></li>
+                    <li><a href="/giftcard/sell/"><i class="fas fa-box-open"></i> Sell gift</a></li>
+                    <li><a href="buycrypto.html"><i class="fab fa-ethereum"></i> Buy coin</a></li>
+                    <li><a href="sellcrypto.html"><i class="fab fa-btc"></i> Sell coin</a></li>
+                    <li><a href="buyairtime-data.html"><i class="fas fa-phone"></i> Recharge</a></li>
+                </ul>
+            </aside>
+            
+            <main class="dashboard-content">
+                <ul>
+                    <li><a href="#"  class="active">Profile</a></li>
+                    <li><a href="#">Wallets</a></li>
+                    <li><a href="#">Transactions</a></li>
+                </ul>
+                <section class="balance-trend">
+                    <h2>Balance & Trend</h2>
+                    <div class="transaction-typ-tag">
+                        <button>All</button>
+                        <button>Failed</button>
+                        <button>Pending</button>
+                        <button>Completed</button>
+                    </div>
+                    <div id="balance-chart" style="height: 300px; background-color: #f0f0f0;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Status</th>
+                                    <th>Date/Time</th>
+                                    <th>Type</th>
+                                    <th>Amount</th>
+                                    <th>Tag</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if transactions %}
+                                    {% for transaction in transactions %}
+                                        <tr>
+                                            {% if transaction.status == "Approved" %}
+                                                <td><i class="checked-box fas fa-check-square"></i></td>
+                                            {% elif transaction.status == "Pending" %}
+                                                <td><i class="unchecked-box fas fa-square"></i></td>
+                                            {% elif transaction.status == "Rejected" %}
+                                                <td><i class="unchecked-box fas fa-times-square"></i></td>
+                                            {% else %}
+                                                <td><i class="unchecked-box fas fa-square"></i></td>
+                                            {% endif %}
+                                            <td>{{ transaction.date_time.date }} | {{ transaction.date_time.time }}</td>
+                                            <td>{{ transaction.transaction_type }}</td>
+                                            <td>{{ transaction.amount }}</td>
+                                            <td>{{ transaction.status }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                {% else %}
+                                        <tr>
+                                            <td>No transactions Yet</td>
+                                        </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="transaction-time-range">
+                        <div class="time-range">
+                            <button class="active">12 months</button>
+                            <button>30 days</button>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="GiftMarket notifications">
+                    <h2>Gift Card Market Place</h2>
+                    <div class="giftcards notification">
+                        {% if giftcards %}
+                            {% for giftcard in giftcards %}
+                                <div class="giftcard notification-item">
+                                    <img src="{{ giftcard.uploaded_image.url }}" alt="" width="65%">
+                                    <span>
+                                        <h3>{{ giftcard.card_type }}</h3>
+                                        <i>{{ giftcard.status }}</i>
+                                        <p>{{ giftcard.price }}</p>
+                                    </span>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                                No Gift Cards Yet
+                        {% endif %}
+                    </div>
+                </section>
+                
+                <section class="notifications">
+                    <h2>Notifications</h2>
+                    <div class="notification">
+                        <div class="notification-item unread">
+                            <div class="notification-content">
+                                <h3>New Message</h3>
+                                <span class="notification-time">2 hours ago</span>
+                                <p>You have a new message from the support team.</p>
+                            </div>
+                        </div>
+                        <div class="notification-item">
+                            <div class="notification-content">
+                                <h3>Transaction Complete</h3>
+                                <span class="notification-time">1 day ago</span>
+                                <p>Your recent withdrawal has been processed.</p>
+                            </div>
+                        </div>
+                        <div class="notification-item">
+                            <div class="notification-content">
+                                <h3>Transaction Complete</h3>
+                                <span class="notification-time">1 day ago</span>
+                                <p>Your recent withdrawal has been processed.</p>
+                            </div>
+                        </div>
+                        <div class="notification-item">
+                            <div class="notification-content">
+                                <h3>Transaction Complete</h3>
+                                <span class="notification-time">1 day ago</span>
+                                <p>Your recent withdrawal has been processed.</p>
+                            </div>
+                        </div> 
+                    </div>       
+                </section>
+            </main>
+            
+        </div>
+    </div>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="{% static 'core/js/menu.js' %}"></script>
+</body>
+</html>

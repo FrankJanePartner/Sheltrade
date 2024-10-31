@@ -1,0 +1,139 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buy Gift Card</title>
+    <link rel="stylesheet" href="{% static 'core/css/buygiftcard.css' %}">
+    <link rel="stylesheet" href="{% static 'core/css/sellgiftcard.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="right">
+                    <div class="logo">
+                        <a href=""><img src="{% static 'core/image/Logo.png' %}" alt="Sheltrade Logo"></a>
+                    </div>
+                </div>
+                <div class="user-menu">
+                    <a href="">Logout</a>
+                    <a href="" class="help">Help</a>
+                    <i class="setting fas fa-cog"></i>
+                    <i class="notification fas fa-bell"></i>
+                    <img src="{% static 'core/image/F1.jpg' %}" alt="User Avatar">
+                </div>
+            </div>
+        </header>
+        
+        <div class="main-content">
+            <main class="dashboard-content"style="width: 100dvw; margin: 0; display: flex; flex-direction: column; justify-content:space-between; align-items:center;">
+                <section class="gift-card-management" style="width: 60dvw; margin: 0; display: flex; flex-direction: column; justify-content:space-between; align-items:center;">
+                    <form method="post" action="{% url 'giftcard:buy_gift_card' %}" enctype="multipart/form-data" style="width: 50dvw;">
+                        {% csrf_token %}
+                        {% for message in messages %}
+                            <h5>{{ message }}</h5>
+                        {% endfor %}
+                        <h2>Select Gift Card Type</h2>
+                        <a href="/giftcard/sell/"><h2>Sell Gift Card &rarr;</h2></a>
+                        <div class="form-group">
+                            <i class="opened-package fas fa-box-open"></i>
+                            <input type="search" id="card_type_search" placeholder="Choose a card type">
+                        </div>
+                        <div class="giftcard-image">
+                            {% if giftcards %}
+                                {% for giftcard in giftcards %}
+                                    <div class="gift-img" data-name="{{ giftcard.card_type }}" data-id="{{ giftcard.id }}">
+                                        <img src="{{ giftcard.uploaded_image.url }}" alt="{{ giftcard.card_type }}">
+                                        <section>
+                                            <h5>{{ giftcard.card_type }}</h5>
+                                            <span>${{ giftcard.price }}</span>
+                                        </section>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                No Gift Cards Yet
+                            {% endif %}
+                        </div>
+                    
+                        <input type="hidden" id="selected-giftcard-id" name="giftcard-id" value="">
+                    
+                        <div class="amount-select">
+                            <label for="card-amount">Select Amount</label>
+                            <input type="number" id="card-amount" name="card-amount" placeholder="Enter amount">
+                        </div>
+                        
+                        <div class="transaction-summary">
+                            <h2>Transaction Summary</h2>
+                            <p>You are about to buy a gift card</p>
+                            <div class="summary-item">
+                                <h4>Card Type:</h4>
+                                <span id="selected-card-type">Amazon Gift Card</span>
+                            </div>
+                            <div class="summary-item">
+                                <h4>Amount:</h4>
+                                <span>$<span id="selected-amount">0</span></span>
+                            </div>
+                            <div class="summary-item">
+                                <h4>Processing Fee:</h4>
+                                <span>$5</span>
+                            </div>
+                            <div class="summary-item">
+                                <h4>Total:</h4>
+                                <span>$<span id="total-amount">5</span></span>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn-buy">Buy Now</button>
+                    </form>
+                    
+                </section>
+                
+            </main>
+        </div>
+    </div>
+    <script src="{% static 'core/js/header.js' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('card_type_search');
+            const giftCards = document.querySelectorAll('.gift-img');
+            const amountInput = document.getElementById('card-amount');
+            const selectedCardIdInput = document.getElementById('selected-giftcard-id');
+            const selectedCardTypeDisplay = document.getElementById('selected-card-type');
+            const selectedAmountDisplay = document.getElementById('selected-amount');
+            const totalAmountDisplay = document.getElementById('total-amount');
+        
+            // Filter functionality
+            searchInput.addEventListener('input', function() {
+                const query = this.value.toLowerCase();
+        
+                giftCards.forEach(card => {
+                    const cardName = card.getAttribute('data-name').toLowerCase();
+                    if (cardName.includes(query)) {
+                        card.style.display = ''; // Show the card
+                    } else {
+                        card.style.display = 'none'; // Hide the card
+                    }
+                });
+            });
+        
+            // Add click event to each gift card
+            giftCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const cardPrice = this.querySelector('span').innerText.replace('$', '');
+                    const cardId = this.getAttribute('data-id');
+                    const cardType = this.querySelector('h5').innerText;
+        
+                    amountInput.value = cardPrice; // Set the input value to the card price
+                    selectedCardIdInput.value = cardId; // Set the hidden input value to the card ID
+                    selectedCardTypeDisplay.innerText = cardType; // Update displayed card type
+                    selectedAmountDisplay.innerText = cardPrice; // Update displayed amount
+                    totalAmountDisplay.innerText = (parseFloat(cardPrice) + 5).toFixed(2); // Update total amount
+                });
+            });
+        });        
+    </script>
+</body>
+</html>
