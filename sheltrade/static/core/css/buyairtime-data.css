@@ -1,0 +1,353 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap');
+
+/* Reset default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Manrope'
+}
+
+body {
+    width: 100dvw;
+    height: fit-content;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f7fa;
+    overflow-x: hidden;
+}
+
+.container {
+    max-width: 100dvw;
+    margin: 0;
+}
+
+/* Main content styles */
+.dashboard-content  {
+    padding: 30px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.buy-crypto {
+    width: 56%;
+    height: fit-content;
+    margin: 0 auto;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+}
+
+h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.crypto-form {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.crypto-form section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.tabs {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.tab {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.tab label{
+    margin-bottom: 20px;
+}
+
+.tab-button {
+    width: fit-content;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.tab-button.active {
+    background-color: #007bff;
+    color: #ffffff;
+}
+
+.tab-content {
+    display: none;
+}
+
+.amount{
+    width: 100%;
+}
+
+.amount-select {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.amount-select input[type="number"] {
+    width: 70%;
+}
+
+.amount-select select {
+    width: 27%;
+    font-size: 15px;
+}
+
+.amount-select select option {
+    font-size: 12px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+select, input[type="number"], input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+@media screen and (max-width: 768px) {
+    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap');
+
+    /* Reset default styles */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Manrope';
+        background-color: #171A1FFF;
+        color: #ffffff;
+    }
+    
+    body {
+        width: 100dvw;
+        height: fit-content;
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f4f7fa;
+        overflow-x: hidden;
+    }
+    
+    .container {
+        max-width: 100dvw;
+        margin: 0;
+    }
+
+    /* Everything in the header */
+    header,
+    .header-content,
+    .logo,
+    .logo img,
+    .logo span,
+    .user-menu,
+    .profile-dropdown,
+    .right,
+    .left,
+    .dropdown-arrow,
+    .notification,
+    .setting,
+    .help,
+    .logout,
+    .profile-dropdown img,
+    .profile-dropdown i,
+    .profile-dropdown a,
+    .profile-dropdown a img,
+    .user-menu a,
+    .user-menu a img,
+    .user-menu a i,
+    .user-menu a span,
+    .user-menu a .notification,
+    .user-menu a .setting,
+    .user-menu a .help,
+    .user-menu a .logout,
+    .user-menu-mobile a,
+    .user-menu-mobile a img,
+    .user-menu-mobile a i,
+    .user-menu-mobile a span,
+    .user-menu-mobile a .notification,
+    .user-menu-mobile a .setting,
+    .user-menu-mobile a .help,
+    .user-menu-mobile a .logout
+    {
+        background-color: #ffffff;
+        color: #000000;
+    }
+    
+    /* Main content styles */
+
+    .dashboard-content  {
+        height: 100dvh;
+        padding: 30px 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 5rem 0;
+    }
+    
+    .buy-crypto {
+        width: 95%;
+        height: fit-content;
+        margin: 0 auto;
+        background-color: #171A1FFF;
+        border-radius: 8px;
+        box-shadow: 2px 2px 50px 2px #787c80;
+        padding: 30px;
+    }
+    
+    h1 {
+        font-size: 28px;
+        margin-bottom: 20px;
+        color: #ffffff;
+    }
+    
+    .crypto-form {
+        background-color: #171A1FFF;
+        border-radius: 8px;
+        padding: 30px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 30px;
+    }
+    
+    .crypto-form section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .form-group {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    
+    .tabs {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+    
+    .tab {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    
+    .tab-button {
+        width: fit-content;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 16px;
+        font-weight: 600;
+    }
+    
+    .tab-button.active {
+        background-color: #007bff;
+        color: #ffffff;
+    }
+    
+    .tab-content {
+        display: none;
+    }
+    
+    .amount{
+        width: 100%;
+    }
+    
+    .amount-select {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+    }
+    
+    .amount-select input[type="number"] {
+        width: 100%;
+    }
+    
+    .amount-select select {
+        width: 27%;
+        font-size: 15px;
+    }
+    
+    .amount-select select option {
+        font-size: 12px;
+    }
+    
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 500;
+    }
+    
+    select, input[type="number"], input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 16px;
+    }
+    
+    .btn-primary {
+        background-color: #007bff;
+        color: #ffffff;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .tab-content .form-group{
+        width: 100%;
+    }
+
+    .tab-content input{
+        width: 100%;
+    }
+
+    .tab-content select{
+        width: 100%;
+    }
+   
+}
