@@ -27,7 +27,7 @@ VTPass_PASSWORD=env('VTPass_PASSWORD')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []#'sheltrade.pythonanywhere.com', 'https://www.sheltrade.pythonanywhere.com', 'www.sheltrade.pythonanywhere.com']
+ALLOWED_HOSTS = ['sheltrade.pythonanywhere.com', 'https://www.sheltrade.pythonanywhere.com', 'www.sheltrade.pythonanywhere.com']
 
 
 
