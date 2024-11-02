@@ -62,7 +62,7 @@ def add_gift_card(request):
         amount= float(price) - 0.01
         gift_card.save()
         
-        transaction = Transaction(user=request.user, transaction_type='Sell GiftCard', amount=amount, status="pending")
+        transaction = Transaction(user=request.user, transaction_type='Sell Giftcard', amount=amount, status="pending")
         transaction.save()
 
         # ScrapyData = scrape_gift_card_granny(card_type)
@@ -88,26 +88,24 @@ def buy_gift_card(request):
         try:
             amount = Decimal(selected_amount)
             selected_giftcard = GiftCard.objects.get(id=giftcard_id)
+            wallet = Wallet.objects.get(user=request.user)
+            total_cost = amount + Decimal('5.00')
 
-            with transaction.atomic():  # Ensure all-or-nothing for wallet and transaction updates
-                guygiftcard = BuyGiftCard(buyer=request.user, gift_card=selected_giftcard)
-                guygiftcard.save()
-
-                wallet = Wallet.objects.get(user=request.user)
-                total_cost = amount + Decimal('5.00')  # Include processing fee
-
-                if wallet.userBalance < total_cost:
-                    messages.error(request, 'Insufficient balance in your wallet.')
-                    return redirect('giftcard:buygiftcard')
-
+            if wallet.userBalance < total_cost:
+                messages.error(request, 'Insufficient balance in your wallet.')
+                return redirect('giftcard:buygiftcard')
+            else:
                 wallet.userBalance -= total_cost  # Deduct amount + fee
-                wallet.save()  # Save updated wallet balance
+                wallet.save()
+
+                buygiftcard = BuyGiftCard(buyer=request.user, gift_card=selected_giftcard, escrow_status='held')
+                buygiftcard.save()
+
+                transaction = Transaction(user=request.user, transaction_type='Buy Giftcard', amount=amount, status="pending")
+                transaction.save()
+
 
                 messages.success(request, f'Gift card for {selected_giftcard.card_type} purchased successfully! Total: ${total_cost:.2f}')
-
-                # Log the transaction
-                transaction = Transaction(user=request.user, transaction_type='Fund Held', amount=amount, status="pending")
-                transaction.save()
 
             return redirect('core:dashboard')  # Redirect to a success page
 

@@ -3,6 +3,10 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+admin.site.site_header = 'Sheltrade'
+admin.site.site_title = 'Sheltrade Admin Panel'
+admin.site.index_title = 'Sheltrade Administration'
+
 urlpatterns = [
     path('admin/', admin.site.urls),
 

@@ -5,6 +5,7 @@ from .models import Transaction,  Wallet
 from giftcard.models import GiftCard, BuyGiftCard
 
 
+
 @receiver(post_save, sender=User)
 def create_user_transaction(sender, instance, created, **kwargs):
     if created:
@@ -13,56 +14,59 @@ def create_user_transaction(sender, instance, created, **kwargs):
           # Adjust the amount or any other fields as necessary
 
 
+
 @receiver(post_save, sender=Transaction)
 def handle_User_transactions(sender, instance, created, **kwargs):
-    if created:
-        user = instance.user
-        giftcard = GiftCard.objects.filter(seller=user).first()
-        giftcardBuyer = BuyGiftCard.objects.filter(buyer=user).first()
+    user = instance.user
+    userBalance = Wallet.objects.get(user=user)
 
-        # Ensure that the user has both a gift card and a buyer record
-        if not giftcard or not giftcardBuyer:
-            # Log an error or handle it appropriately
-            return
+    # Get the related BuyGiftCard instances for the user
+    giftcardBuyers = BuyGiftCard.objects.filter(buyer=user)
 
-        userBalance = Wallet.objects.get(user=user)
+    # Check if there are any BuyGiftCard instances
+    if not giftcardBuyers.exists():
+        print("No BuyGiftCard instances for this user.")
+        return  # Early exit if no BuyGiftCard records found
 
+    for giftcardBuyer in giftcardBuyers:
+        seller = giftcardBuyer.gift_card.seller
+        sellerBalance = Wallet.objects.get(user=seller)
+        
+
+        # Proceed with the transaction logic based on instance.status and transaction_type
         if instance.status == 'Approved':
-            if instance.transaction_type == 'Deposit':
+            if instance.transaction_type == "Deposit":
                 userBalance.userBalance += instance.amount
+                userBalance.save()
             elif instance.transaction_type == 'Withdrawal':
                 userBalance.userBalance -= instance.amount
-            elif instance.transaction_type == 'SellGift Card':
-                giftcard.status = "listed"
-            elif instance.transaction_type == 'Fund Held':
-                # Mark the gift card as sold
-                giftcard.status = "Sold"
+                userBalance.save()
+            elif instance.transaction_type == 'Sell Giftcard':
+                giftcardBuyer.gift_card.status = "listed"
+                giftcardBuyer.gift_card.save()  # Save the updated gift card status
+            elif instance.transaction_type == 'Buy Giftcard':
+                giftcardBuyer.gift_card.status = "Sold"
+                for giftcardBuyer in giftcardBuyers:
+                    seller = giftcardBuyer.gift_card.seller
+                    sellerBalance = Wallet.objects.get(user=seller)
                 
-                # Update seller's wallet
-                seller_wallet = Wallet.objects.get(user=giftcard.seller)
-                seller_wallet.userBalance += instance.amount  # Update the seller's balance
+                giftcardBuyer.escrow_status = "Sold"
+                sellerBalance.userBalance += instance.amount
+                sellerBalance.save()
+                transaction = Transaction(user=seller, transaction_type='Sell Giftcard', amount=instance.amount, status="Approved")
+                transaction.save()
+            else:
+                pass
+
+        elif instance.status == 'Rejected':
+            if instance.transaction_type == 'Buy Giftcard':
+                giftcardBuyer.gift_card.status = "Sold"
+                for giftcardBuyer in giftcardBuyers:
+                    seller = giftcardBuyer.gift_card.seller
+                    sellerBalance = Wallet.objects.get(user=seller)
                 
-                # Release the escrow status
-                giftcard.escrow_status = "released"
-
-                # Save both wallets and the gift card
-                seller_wallet.save()
-            
-            # Save the user's wallet and gift card changes
-            userBalance.save()
-            giftcard.save()
-
-        elif instance.status == 'rejected' and instance.transaction_type == 'Fund Held':
-            giftcard.status = "invalid"
-            giftcardBuyer.userBalance += instance.amount
-            giftcard.escrow_status = "refunded"
-
-            # Save updated states
-            userBalance.save()
-            giftcardBuyer.save()
-            giftcard.save()
-
-# @receiver(post_save, sender=Earned)
-# def handle_User_Earning(sender, instance, created, **Kwargs):
-#     user = instance.user
-#     profile = Profile.objects.get(user=user)
+                giftcardBuyer.escrow_status = "Sold"
+                sellerBalance.userBalance += instance.amount
+                sellerBalance.save()
+                transaction = Transaction(user=seller, transaction_type='Sell Giftcard', amount=instance.amount, status="Approved")
+                transaction.save()

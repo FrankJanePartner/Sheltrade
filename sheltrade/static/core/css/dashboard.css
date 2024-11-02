@@ -318,6 +318,7 @@ i.fa-square {
 }
 
 .giftcard img{
+    height: 100%;
     object-fit: contain;
 }
 

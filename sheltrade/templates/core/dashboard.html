@@ -86,7 +86,7 @@
                         <button>Pending</button>
                         <button>Completed</button>
                     </div>
-                    <div id="balance-chart" style="height: 300px; background-color: #f0f0f0;">
+                    <div id="balance-chart" style="height: fit-content; background-color: #f0f0f0;">
                         <table>
                             <thead>
                                 <tr>
@@ -138,7 +138,7 @@
                         {% if giftcards %}
                             {% for giftcard in giftcards %}
                                 <div class="giftcard notification-item">
-                                    <img src="{{ giftcard.uploaded_image.url }}" alt="" width="65%">
+                                    <img src="{{ giftcard.uploaded_image.url }}" alt="" width="120rem" height="80rem">
                                     <span>
                                         <h3>{{ giftcard.card_type }}</h3>
                                         <i>{{ giftcard.status }}</i>

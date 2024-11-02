@@ -11,12 +11,7 @@ class GiftCard(models.Model):
         ('Sold', 'Sold'),
     ]
 
-    ESCROW_STATUSES = [
-        ('held', 'Held'),
-        ('released', 'Released'),
-        ('refunded', 'Refunded')
-    ]
-
+    
     seller = models.ForeignKey(User, on_delete=models.CASCADE, related_name='cards', null=True)
     card_type = models.CharField(max_length=50, help_text=_("Brand/retailer name e.g., Amazon, Steam"))
     card_number = models.CharField(max_length=30, blank=True, null=True)
@@ -27,8 +22,7 @@ class GiftCard(models.Model):
     restrictions = models.TextField(blank=True, null=True, help_text=_("Any specific terms or restrictions"))
     uploaded_image = models.ImageField(upload_to='gift_cards/', blank=True, null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-    status = models.CharField(max_length=10, choices=CARD_STATUSES, default='pending')
-    escrow_status = models.CharField(max_length=10, choices=ESCROW_STATUSES, default='held')
+    status = models.CharField(max_length=10, choices=CARD_STATUSES, default='listed')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -37,8 +31,14 @@ class GiftCard(models.Model):
 
 
 class BuyGiftCard(models.Model):
+    ESCROW_STATUSES = [
+        ('held', 'Held'),
+        ('released', 'Released'),
+        ('refunded', 'Refunded')
+    ]
     buyer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='bought_cards', null=True)
     gift_card = models.ForeignKey(GiftCard, on_delete=models.CASCADE, related_name='bought', null=True)
+    escrow_status = models.CharField(max_length=10, choices=ESCROW_STATUSES, default='held')
     bought_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     

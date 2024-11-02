@@ -3,21 +3,28 @@ from django.http import JsonResponse
 from pprint import pprint as pp
 from .utils import VTUAPI, API_KEY, PUBLIC_KEY, SECRET_KEY
 from wallet.models import Transaction
+from django.contrib.auth.decorators import login_required
 
 # Initialize the VTUAPI with the necessary keys
 vtu_api = VTUAPI(API_KEY, PUBLIC_KEY, SECRET_KEY)
 
+@login_required
 def buyairtime(request):
     requestID = vtu_api.generate_request_id()
     error_message = None
 
     if request.method == 'POST':
         network = request.POST.get('network')
-        phone_number = request.POST.get('phone')
+        phone_number = request.POST.get('phone-number')
         amount = request.POST.get('amount')
 
-        if not network or not phone_number or not amount:
-            error_message = "All fields are required."
+        if not network:
+            error_message = "Nework required."
+        elif not phone_number:
+            error_message = "Phone required."
+        elif not amount:
+            error_message = "Amount required."
+
         else:
             buy_airtime_response = vtu_api.buyairtime(requestID, network, amount, phone_number)
 
@@ -29,6 +36,7 @@ def buyairtime(request):
     return render(request, 'mobileTopup/buyairtime-data.html', {'error': error_message})
 
 
+@login_required
 def buydata(request):
     requestID = vtu_api.generate_request_id()
     error_message = None
@@ -53,6 +61,7 @@ def buydata(request):
     return render(request, 'mobileTopup/buydata.html', {'error': error_message})
 
 
+@login_required
 def fetch_data_plans(request):
     service_id = request.GET.get('serviceID')
     

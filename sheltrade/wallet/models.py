@@ -15,7 +15,7 @@ class Transaction(models.Model):
     PAYMENT_STATUS = (
         ('Pending', 'Pending'),
         ('Approved', 'Approved'),
-        ('rejected', 'Rejected'),
+        ('Rejected', 'Rejected'),
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     proof_of_payment = models.FileField(upload_to="images/proof_of_payment", blank=True)
@@ -25,7 +25,7 @@ class Transaction(models.Model):
     date_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.user.username} - {self.amount} - {self.status} - {self.id}"
+        return f"{self.user.username} - {self.transaction_type} - {self.amount} - {self.status} - {self.id}"
 
 
 
