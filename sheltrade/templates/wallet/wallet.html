@@ -1,169 +1,86 @@
+{% extends "../base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wallet</title>
+{% block content %}
+{% block title %}Wallet{% endblock %}
+{% block style %}
     <link rel="stylesheet" href="{% static 'core/css/dashboard.css' %}">
-    <link rel="stylesheet" href="{% static 'core/css/menu.css' %}">
-    <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
-    <link rel="shortcut icon" href="{% static 'core/core/image/Icon.png' %}" type="image/x-icon">
-    <link rel="stylesheet" href="{% static 'core/css/wallet.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
-    <link rel='stylesheet' href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<body>
-    <header>
-        <div class="header-content">
-            <div class="right">
-                <button id="aside-menu-btn" class="aside-menu-btn aside-control">
-                    <div id="menu-icon" class="fas fa-bars"></div>
-                </button>
-                <div class="logo">
-                    <a href="home.html"><img src="{% static 'core/image/Logo.png' %}" alt="Sheltrade Logo"></a>
-                </div>
-            </div>
-            <nav>
-                <ul>
-                    <li><a href="profile.html">Profile</a></li>
-                    <li><a href="/wallet/">Wallets</a></li>
-                    <li><a href="#">Transactions</a></li>
-                </ul>
-            </nav>
-            <div class="user-menu">
-                <a href=""><i class="logout -icon ri-logout-box-r-line"></i>Logout</a>
-                <a href="contactus.html"><i class="help  fas fa-question-circle"></i></a>
-                <a href=""><i class="setting fas fa-cog"></i></a>
-                <a href=""><i class="notification fas fa-bell"></i></a>
-                <a href=""><i class="user fas fa-user"></i></a>
-
-            </div>
-            <button id="menu-btn" class="menu_bar">
-                <div id="menu-icon" class="fas fa-bars"></div>
-                <div><span class="menu_span">Hi user</span></div>
-            </button>
-            <ul class="accordion_menu">
-                <li><a class="dropdown_text" href="wallet.html"><i class="wallet  fas fa-wallet"></i> Wallets</a></li>
-                <li><a class="dropdown_text" href="profile.html"><i class="user fas fa-user"></i> Profile</a></li>
-                <li><a class="dropdown_text" href="notification.html"><i class="notification fas fa-bell"></i> Notification</a></li>
-                <li><a class="dropdown_text" href="settings.html"><i class="setting fas fa-cog"></i>  Settings</a></li>
-                <li><a class="dropdown_text" href="contactus.html"><i class="help  fas fa-question-circle"></i>  Help</a></li>
-                <li><a class="dropdown_text" href=""><i class="logout -icon ri-logout-box-r-line"></i>Logout</a></li>
-            </ul>
+{% endblock %}
+<link rel="stylesheet" href="{% static 'core/css/authheaderstyle.css' %}">
+<main class="container">
+    <section id="wallet-overview">
+        <h1>Your Wallet</h1>
+        {% for message in messages %}
+            <div style="display:none;">{{ message }}</div>  <!-- This can be kept for other uses -->
+        {% endfor %}
+        <div class="balance-card">
+            <h2>Current Balance</h2>
+            <p class="balance">{{ wallet.userBalance }}</p>
         </div>
-    </header>
+    </section>
 
-    <main class="container">
-        <section id="wallet-overview">
-            <h1>Your Wallet</h1>
+    <section id="wallet-actions">
+        <div class="action-card">
+            <a href="/wallet/deposit/"><h2>Fund Wallet</h2></a>
+        </div>
+        <div class="action-card">
+            <a href="/wallet/withdraw/"><h2>Withdraw Funds</h2></a>
+        </div>
+        <div class="action-card">
+            <a href="/wallet/add_account/"><h2>Add Bank Account</h2></a>
+        </div>
+    </section>
+
+    <section id="transaction-history">
+        <h2>Transaction History</h2>
+        <div class="transaction-filters">
+            <input type="date" id="start-date" name="start-date">
+            <input type="date" id="end-date" name="end-date">
+            <select id="transaction-type" name="transaction-type">
+                <option value="">All Types</option>
+                <option value="deposit">Deposit</option>
+                <option value="withdrawal">Withdrawal</option>
+                <option value="purchase">Purchase</option>
+            </select>
+            <button id="apply-filters" class="btn btn-secondary">Apply Filters</button>
+        </div>
+        <table class="transaction-table">
+            <thead>
+                <tr>
+                    <th>Date/Time</th>
+                    <th>Type</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if transactions %}
+                    {% for transaction in transactions %}
+                        <tr>
+                            <td>{{ transaction.date_time.date }} | {{ transaction.date_time.time }}</td>
+                            <td>{{ transaction.transaction_type }}</td>
+                            <td>{{ transaction.amount }}</td>
+                            <td>{{ transaction.status }}</td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                        <tr>
+                            <td>No transactions Yet</td>
+                        </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </section>
+</main>
+
+
+<script src="{% static 'core/js/wallet.js' %}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        {% if messages %}
             {% for message in messages %}
-                <div style="display:none;">{{ message }}</div>  <!-- This can be kept for other uses -->
+                alert("{{ message }}");
             {% endfor %}
-            <div class="balance-card">
-                <h2>Current Balance</h2>
-                <p class="balance">{{ wallet.userBalance }}</p>
-            </div>
-        </section>
-
-        <section id="wallet-actions">
-            <div class="action-card">
-                <a href="/wallet/deposit/"><h2>Fund Wallet</h2></a>
-            </div>
-            <div class="action-card">
-                <a href="/wallet/withdraw/"><h2>Withdraw Funds</h2></a>
-            </div>
-            <div class="action-card">
-                <a href="/wallet/add_account/"><h2>Add Bank Account</h2></a>
-            </div>
-        </section>
-
-        <section id="transaction-history">
-            <h2>Transaction History</h2>
-            <div class="transaction-filters">
-                <input type="date" id="start-date" name="start-date">
-                <input type="date" id="end-date" name="end-date">
-                <select id="transaction-type" name="transaction-type">
-                    <option value="">All Types</option>
-                    <option value="deposit">Deposit</option>
-                    <option value="withdrawal">Withdrawal</option>
-                    <option value="purchase">Purchase</option>
-                </select>
-                <button id="apply-filters" class="btn btn-secondary">Apply Filters</button>
-            </div>
-            <table class="transaction-table">
-                <thead>
-                    <tr>
-                        <th>Date/Time</th>
-                        <th>Type</th>
-                        <th>Amount</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% if transactions %}
-                        {% for transaction in transactions %}
-                            <tr>
-                                <td>{{ transaction.date_time.date }} | {{ transaction.date_time.time }}</td>
-                                <td>{{ transaction.transaction_type }}</td>
-                                <td>{{ transaction.amount }}</td>
-                                <td>{{ transaction.status }}</td>
-                            </tr>
-                        {% endfor %}
-                    {% else %}
-                            <tr>
-                                <td>No transactions Yet</td>
-                            </tr>
-                    {% endif %}
-                </tbody>
-            </table>
-        </section>
-    </main>
-
-    <footer>
-        <div class="footer-content">
-            <div class="footer-logo">
-                <img src="{% static 'core/image/Logo white.png' %}" alt="Sheltrade Logo">
-            </div>
-            <div class="quick-links">
-                <h4>Quick Links</h4>
-                <ul>
-                    <li><a href="home.html">Home</a></li>
-                    <li><a href="#about">About Us</a></li>
-                    <li><a href="#services">Services</a></li>
-                    <li><a href="contactus.html">Contact Us</a></li>
-                </ul>
-            </div>
-            <div class="social-media">
-                <h4>Follow Us</h4>
-                <a href="#" class="social-icon">Facebook</a>
-                <a href="#" class="social-icon">Twitter</a>
-                <a href="#" class="social-icon">Instagram</a>
-                <a href="#" class="social-icon">LinkedIn</a>
-            </div>
-            <div class="contact-info">
-                <h4>Contact Information</h4>
-                <p>Email: support@sheltrade.com</p>
-                <p>Phone: +1 (555) 123-4567</p>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2024 Sheltrade. All rights reserved.</p>
-            <a href="#terms">Terms of Service</a> | <a href="#privacy">Privacy Policy</a>
-        </div>
-    </footer>
-
-    <script src="{% static 'core/js/wallet.js' %}"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            {% if messages %}
-                {% for message in messages %}
-                    alert("{{ message }}");
-                {% endfor %}
-            {% endif %}
-        });
-    </script>
-</body>
-</html>
+        {% endif %}
+    });
+</script>
+{% endblock %}
