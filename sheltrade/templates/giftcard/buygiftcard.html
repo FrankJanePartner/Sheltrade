@@ -1,33 +1,12 @@
+{% extends "../base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buy Gift Card</title>
-    <link rel="stylesheet" href="{% static 'core/css/buygiftcard.css' %}">
-    <link rel="stylesheet" href="{% static 'core/css/sellgiftcard.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<body>
+{% block title %}Buy Gift Card{% endblock %}
+{% block style %}
+<link rel="stylesheet" href="{% static 'core/css/buygiftcard.css' %}">
+<link rel="stylesheet" href="{% static 'core/css/sellgiftcard.css' %}">
+{% endblock %}
+{% block content %}
     <div class="container">
-        <header>
-            <div class="header-content">
-                <div class="right">
-                    <div class="logo">
-                        <a href=""><img src="{% static 'core/image/Logo.png' %}" alt="Sheltrade Logo"></a>
-                    </div>
-                </div>
-                <div class="user-menu">
-                    <a href="">Logout</a>
-                    <a href="" class="help">Help</a>
-                    <i class="setting fas fa-cog"></i>
-                    <i class="notification fas fa-bell"></i>
-                    <img src="{% static 'core/image/F1.jpg' %}" alt="User Avatar">
-                </div>
-            </div>
-        </header>
-        
         <div class="main-content">
             <main class="dashboard-content"style="width: 100dvw; margin: 0; display: flex; flex-direction: column; justify-content:space-between; align-items:center;">
                 <section class="gift-card-management" style="width: 60dvw; margin: 0; display: flex; flex-direction: column; justify-content:space-between; align-items:center;">
@@ -94,46 +73,49 @@
             </main>
         </div>
     </div>
-    <script src="{% static 'core/js/header.js' %}"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const searchInput = document.getElementById('card_type_search');
-            const giftCards = document.querySelectorAll('.gift-img');
-            const amountInput = document.getElementById('card-amount');
-            const selectedCardIdInput = document.getElementById('selected-giftcard-id');
-            const selectedCardTypeDisplay = document.getElementById('selected-card-type');
-            const selectedAmountDisplay = document.getElementById('selected-amount');
-            const totalAmountDisplay = document.getElementById('total-amount');
-        
-            // Filter functionality
-            searchInput.addEventListener('input', function() {
-                const query = this.value.toLowerCase();
-        
-                giftCards.forEach(card => {
-                    const cardName = card.getAttribute('data-name').toLowerCase();
-                    if (cardName.includes(query)) {
-                        card.style.display = ''; // Show the card
-                    } else {
-                        card.style.display = 'none'; // Hide the card
-                    }
-                });
-            });
-        
-            // Add click event to each gift card
+    
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'core/js/header.js' %}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('card_type_search');
+        const giftCards = document.querySelectorAll('.gift-img');
+        const amountInput = document.getElementById('card-amount');
+        const selectedCardIdInput = document.getElementById('selected-giftcard-id');
+        const selectedCardTypeDisplay = document.getElementById('selected-card-type');
+        const selectedAmountDisplay = document.getElementById('selected-amount');
+        const totalAmountDisplay = document.getElementById('total-amount');
+    
+        // Filter functionality
+        searchInput.addEventListener('input', function() {
+            const query = this.value.toLowerCase();
+    
             giftCards.forEach(card => {
-                card.addEventListener('click', function() {
-                    const cardPrice = this.querySelector('span').innerText.replace('$', '');
-                    const cardId = this.getAttribute('data-id');
-                    const cardType = this.querySelector('h5').innerText;
-        
-                    amountInput.value = cardPrice; // Set the input value to the card price
-                    selectedCardIdInput.value = cardId; // Set the hidden input value to the card ID
-                    selectedCardTypeDisplay.innerText = cardType; // Update displayed card type
-                    selectedAmountDisplay.innerText = cardPrice; // Update displayed amount
-                    totalAmountDisplay.innerText = (parseFloat(cardPrice) + 5).toFixed(2); // Update total amount
-                });
+                const cardName = card.getAttribute('data-name').toLowerCase();
+                if (cardName.includes(query)) {
+                    card.style.display = ''; // Show the card
+                } else {
+                    card.style.display = 'none'; // Hide the card
+                }
             });
-        });        
-    </script>
-</body>
-</html>
+        });
+    
+        // Add click event to each gift card
+        giftCards.forEach(card => {
+            card.addEventListener('click', function() {
+                const cardPrice = this.querySelector('span').innerText.replace('$', '');
+                const cardId = this.getAttribute('data-id');
+                const cardType = this.querySelector('h5').innerText;
+    
+                amountInput.value = cardPrice; // Set the input value to the card price
+                selectedCardIdInput.value = cardId; // Set the hidden input value to the card ID
+                selectedCardTypeDisplay.innerText = cardType; // Update displayed card type
+                selectedAmountDisplay.innerText = cardPrice; // Update displayed amount
+                totalAmountDisplay.innerText = (parseFloat(cardPrice) + 5).toFixed(2); // Update total amount
+            });
+        });
+    });        
+</script>
+{% endblock %}

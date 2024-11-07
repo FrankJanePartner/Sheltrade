@@ -11,13 +11,15 @@
             <li><a href="/dashboard/"><i class="fas fa-exchange-alt"></i> Transact</a></li>
             <li><a href="/giftcard/"><i class="fas fa-gift"></i> Buy gift</a></li>
             <li><a href="/giftcard/sell/"><i class="fas fa-box-open"></i> Sell gift</a></li>
-            <li><a href="buycrypto.html"><i class="fab fa-ethereum"></i> Buy coin</a></li>
-            <li><a href="sellcrypto.html"><i class="fab fa-btc"></i> Sell coin</a></li>
-            <li><a href="buyairtime-data.html"><i class="fas fa-phone"></i> Recharge</a></li>
+            <li><a href="/crypto/"><i class="fab fa-ethereum"></i> Buy coin</a></li>
+            <li><a href="/crypto/sell/"><i class="fab fa-btc"></i> Sell coin</a></li>
+            <li><a href="/mobileTopUp/"><i class="fas fa-phone"></i> Recharge</a></li>
+            <li><a href="/billPayments/bills/"><i class="fas fa-money-bill-wave"></i> Pay bills</a></li>
+            <li><a href="/billPayments/"><i class="fas fa-credit-card"></i> Subscriptions</a></li>
         </ul>
     </aside>
     <main class="dashboard-content">
-        <h1>Hello {{ user.username }}</h1>
+        <h1>Hello <span style="color:#FF4500">{{ user.username }}</span></h1>
         <ul>
             <li><a href="#"  class="active">Profile</a></li>
             <li><a href="#">Wallets</a></li>
