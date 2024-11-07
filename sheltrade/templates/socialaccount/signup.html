@@ -1,22 +1,18 @@
 {% load socialaccount %}
-{% load allauth account %}
-{% load allauth i18n %}
+{% load i18n %}
+{% load allauth %}
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'account/css/login.css' %}">
-    <title>Forgot Password</title>
+    <title>Signup</title>
 </head>
 <body>
-    <div class="container">
-        <div class="forgot-password">
-            <h1>Forgot Password</h1>
-            <p>Enter your email to reset your password.</p>
-        </div>
-        <form method="post" action="/accounts/password/reset/">
+    <div class="socialSignIn">
+        <form method="post">
             {% csrf_token %}
             
             {% if form.non_field_errors %}
@@ -35,14 +31,18 @@
                     {% endif %}
                 </div>
             {% endfor %}
-            
+            <h1>Sign Up</h1>
+            <p>You are about to use your Facebook account to login to Sheltrade.com. As a final step, please complete the following form:</p>
             <div class="form-group">
-                <label for="id_email">Email:</label>
-                <input type="email" name="email" placeholder="Email address" autocomplete="email" maxlength="320" required id="id_email">
+                <label for="id_username">Username:</label>
+                <input type="text" name="username" placeholder="Username" autocomplete="username" minlength="1" maxlength="150" required id="id_username">
             </div>
-            <button type="submit" class="btn-primary">Reset Password</button>
+            <div class="form-group">
+                <label for="id_email">Email (optional):</label>
+                <input type="email" name="email" value="partnermarvel55@gmail.com" placeholder="Email address" autocomplete="email" maxlength="320" id="id_email">
+            </div>
+            <buttontype="submit" class="btn-primary" id="btn-primary">Sign Up</button>
         </form>
-        <p>Remember your password? <a href="login.html">Log in</a></p>
     </div>
 </body>
 </html>

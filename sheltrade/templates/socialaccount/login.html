@@ -9,14 +9,25 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="{% static 'account/css/login.css' %}">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-        <title>{% trans "Sign Out" %}</title>
+        <title>{% trans "Sign In" %}</title>
+        <style>
+            
+        </style>
     </head>
     <body>
         <div class="socialSignIn">
-            <div>
+            <div class="left">
+                <img src="{% static 'core/image/logo2.png' %}" alt="{% trans 'Logo' %}">
+            </div>
+            <div class="right">
+                {% if process == "connect" %}
+                    <h1>Connect {{ provider }}</h1>
+                    <p>You are about to connect a new third-party account from {{ provider }}.</p>
+                {% else %}
+                    <h1>Sign In Via {{ provider }}</h1>
+                    <p>You are about to sign in using a third-party account from {{ provider }}.</p>
+                {% endif %}
                 <form method="post">
-                    <h1>Sign Out</h1>
-                    <p>Are you sure you want to sign out?</p>
                     {% csrf_token %}
                     
                     {% if form.non_field_errors %}
@@ -35,9 +46,11 @@
                             {% endif %}
                         </div>
                     {% endfor %}
-                    <button type="submit" class="btn-primary" id="btn-primary">{% trans "Sign Out" %}</button>
+                    <button type="submit" class="btn-primary" id="btn-primary" aria-label="{% trans 'Continue to sign in' %}">{% trans "Continue" %}</button>
                 </form>
             </div>
+            <div class="nonagon"></div>
+            <div class="pentagon"></div>
         </div>
     </body>
 </html>

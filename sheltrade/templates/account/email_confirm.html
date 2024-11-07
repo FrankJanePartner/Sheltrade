@@ -1,0 +1,39 @@
+{% load socialaccount %}
+{% load allauth account %}
+{% load allauth i18n %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'account/css/login.css' %}">
+    <title>Confirm Email Address</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Confirm Email Address</h1>
+        {% if confirmation %}
+            <p>{% user_display confirmation.email_address.user as user_display %}</p>
+            {% if can_confirm %}
+                <p>{% blocktrans with confirmation.email_address.email as email %}Please confirm that <a href="mailto:{{ email }}">{{ email }}</a> is an email address for user {{ user_display }}.{% endblocktrans %}</p>
+                <form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="id_login">Login:</label>
+                        <input type="text" name="login" value="" placeholder="Username or email" autocomplete="email" required id="id_login">
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn-primary">Confirm</button>
+                    </div>
+                </form>
+            {% else %}
+                <p>{% blocktrans %}Unable to confirm {{ email }} because it is already confirmed by a different account.{% endblocktrans %}</p>
+            {% endif %}
+        {% else %}
+        {% url 'account_email' as email_url %}
+            <p>{% blocktrans %}This email confirmation link expired or is invalid. Please <a href="{{ email_url }}">issue a new email confirmation request</a>.{% endblocktrans %}</p>
+        {% endif %}
+    </div>
+</body>
+</html>
