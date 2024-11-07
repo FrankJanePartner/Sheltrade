@@ -21,26 +21,26 @@
         <header>
             <div class="header-content">
                 <div class="right">
-                    <div id="aside-menu-btn" class="aside-menu-btn aside-control">
+                    <div id="aside-menu-btn" class="aside-menu-btn aside-control" style="display: none">
                         <i id="menu-icon" class="fas fa-bars"></i>
                     </div>
                     <div class="logo">
-                        <a href="home.html"><img src="{% static 'core/image/Logo.png' %}" alt="Sheltrade Logo"></a>
+                        <a href="/"><img src="{% static 'core/image/Logo.png' %}" alt="Sheltrade Logo"></a>
                     </div>
                 </div>
                 <nav>
                     <ul>
-                        <li><a href="profile.html">Profile</a></li>
+                        <li><a href="/profile/">Profile</a></li>
                         <li><a href="/wallet/">Wallets</a></li>
-                        <li><a href="#">Transactions</a></li>
+                        <li><a href="/wallet/#transaction-history">Transactions</a></li>
                     </ul>
                 </nav>
                 <div class="user-menu">
-                    <a href=""><i class="logout -icon ri-logout-box-r-line"></i>Logout</a>
-                    <a href="contactus.html"><i class="help  fas fa-question-circle"></i></a>
-                    <a href=""><i class="setting fas fa-cog"></i></a>
-                    <a href=""><i class="notification fas fa-bell"></i></a>
-                    <a href=""><i class="user fas fa-user"></i> {{ user.username }}</a>
+                    <a href="/accounts/logout"><i class="logout -icon ri-logout-box-r-line"></i>Logout</a>
+                    <a href="/contact/"><i class="help  fas fa-question-circle"></i></a>
+                    <a href="/settings/"><i class="setting fas fa-cog"></i></a>
+                    <a href="/notification"><i class="notification fas fa-bell"></i></a>
+                    <a href="/profile/"><i class="user fas fa-user"></i></a>
 
                 </div>
                 <div id="menu-btn" class="menu_bar">
@@ -48,12 +48,12 @@
                     <div id="menu-icon" class="fas fa-chevron-down"></div>
                 </div>
                 <ul class="accordion_menu">
-                    <li><a class="dropdown_text" href="wallet.html"><i class="wallet  fas fa-wallet"></i> Wallets</a></li>
-                    <li><a class="dropdown_text" href="profile.html"><i class="user fas fa-user"></i> Profile</a></li>
-                    <li><a class="dropdown_text" href="notification.html"><i class="notification fas fa-bell"></i> Notification</a></li>
-                    <li><a class="dropdown_text" href="settings.html"><i class="setting fas fa-cog"></i>  Settings</a></li>
-                    <li><a class="dropdown_text" href="contactus.html"><i class="help  fas fa-question-circle"></i>  Help</a></li>
-                    <li><a class="dropdown_text" href=""><i class="logout -icon ri-logout-box-r-line"></i>Logout</a></li>
+                    <li><a class="dropdown_text" href="/wallet/"><i class="wallet  fas fa-wallet"></i> Wallets</a></li>
+                    <li><a class="dropdown_text" href="/profile/"><i class="user fas fa-user"></i> Profile</a></li>
+                    <li><a class="dropdown_text" href="/notification/"><i class="notification fas fa-bell"></i> Notification</a></li>
+                    <li><a class="dropdown_text" href="/settings/"><i class="setting fas fa-cog"></i>  Settings</a></li>
+                    <li><a class="dropdown_text" href="/contact/"><i class="help  fas fa-question-circle"></i>  Help</a></li>
+                    <li><a class="dropdown_text" href="/accounts/logout/"><i class="logout -icon ri-logout-box-r-line"></i>Logout</a></li>
                 </ul>
             </div>
         </header>

@@ -1,12 +1,13 @@
 from django.urls import path
-from .views import home, aboutus,  buycrypto,  dashboard, sellcrypto
+from .views import home, aboutus,  dashboard, profile, notification, settings
 
 app_name = 'core'
 
 urlpatterns = [
     path('', home, name='home'),
     path('about/', aboutus, name='aboutus'),
-    path('buycrypto/', buycrypto, name='buycrypto'),
     path('dashboard/', dashboard, name='dashboard'),
-    path('sellcrypto/', sellcrypto, name='sellcrypto'),
+    path('profile/', profile, name='profile'),
+    path('notification/', notification, name='notification'),
+    path('settings/', settings, name='settings'),
 ]

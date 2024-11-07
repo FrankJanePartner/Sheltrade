@@ -25,8 +25,11 @@ def dashboard(request):
     return render(request, 'core/dashboard.html', context)
 
 
-def sellcrypto(request):
-    return render(request, 'core/sellcrypto.html')
+def profile(request):
+    return render(request, 'core/profile.html')
 
-def buycrypto(request):
-    return render(request, 'core/buycrypto.html')
+def notification(request):
+    return render(request, 'core/notification.html')
+
+def settings(request):
+    return render(request, 'core/settings.html')
