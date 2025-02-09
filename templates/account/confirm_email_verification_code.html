@@ -1,0 +1,48 @@
+{% extends "../formBase.html" %}
+{% load socialaccount %}
+{% load allauth account %}
+{% load allauth i18n %}
+{% load static %}
+{% block title %}Email Verification{% endblock%}
+{% block content %}
+    <div class="container socialSignIn cmailcode">
+        <div class="formHeader">
+            <h1>Enter Email Verification Code</h1>
+        </div>
+            
+        <form id="confirm-email-code" method="post" action="{% url 'account_email_verification_sent' %}">
+            <div class="formStartText">
+                <p>We’ve sent a code to <a href="mailto:{{ email }}">{{ email }}</a>. The code expires shortly, so please enter it soon.</p>
+            </div>
+            {% csrf_token %}
+            <!-- Render the form fields -->
+            {% for field in form %}
+                <div>
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <div>{{ field.errors }}</div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            {{ redirect_field }}
+            <!-- Action buttons -->
+            <button type="submit">Confirm</button>
+            {% if cancel_url %}
+                <a href="{{ cancel_url }}">
+                    <button form="logout-from-stage" type="submit">Cancel</button>
+                </a>
+            {% else %}
+                <button type="submit" form="logout-from-stage">Cancel</button>
+            {% endif %}
+        </form>
+
+        {% if not cancel_url %}
+        <form id="logout-from-stage" method="post" action="{% url 'account_logout' %}">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{% url 'account_login' %}">
+        </form>
+        {% endif %}
+        
+    </div> 
+{% endblock %}

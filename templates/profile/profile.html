@@ -1,0 +1,77 @@
+{% extends "../formBase.html" %}
+{% load static %}
+{% block title %}Profile{% endblock%}
+{% block content %}
+    <style>
+        form{
+            height: fit-content !important;
+        }
+    </style>
+    <div class="container">
+        <div class="topSection">
+            <a href="/dashboard/" class="back">&larr; Go Back</a>
+            <a href="/">
+                <img src="{% static 'core/image/Logo.png' %}" alt="logo" class="logo">
+            </a>
+        </div>
+        <div class="formHeader">
+            <h1>Profile</h1>
+            
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger" >
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+            
+            <!-- Loop through each field in the form -->
+            {% for field in form %}
+                <div>
+                    {% if field.errors %}
+                        <div class="alert alert-danger">
+                            {{ field.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+        <form action="/accounts/password/change/" method="POST" id="confirm-email-code" style="margin-bottom: 1rem;">
+            {% csrf_token %}
+            <h1>Change Password</h1>
+            <button type="submit" class="btn-primary">Change Password</button>
+        </form>
+        <form action="/accounts/password/change/" method="POST" id="confirm-email-code" style="margin-bottom: 1rem;">
+            {% csrf_token %}
+            <h1>Change Email</h1>
+            <div class="form-group">
+                <label for="email">Change to:</label>
+                <input type="email" name="email" id="email" placeholder="email@example.com">
+            </div>
+            <button type="submit" name="action_add" class="btn-primary">Change Email</button>
+        </form>
+
+        <form action="/preferred_currency/" method="POST" id="confirm-email-code">
+            {% csrf_token %}
+            <h1>Set Preferred Currency</h1>
+            <div class="form-group">
+                <select id="currency" name="currency">
+                    {% for p in profile %}
+                        <option style="color:Black !important;">{{ p.preferredCurrency }}</option>
+                    {% endfor %}
+                    {% for d in bankDetail %}
+                        <option value="{{ d.currency }}">{{ d.currency }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" name="action_add" class="btn-primary">Set Preferred Currency</button>
+        </form>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                {% if messages %}
+                    {% for message in messages %}
+                        alert("{{ message }}");
+                    {% endfor %}
+                {% endif %}
+            });
+        </script>
+    </div>
+{% endblock %}

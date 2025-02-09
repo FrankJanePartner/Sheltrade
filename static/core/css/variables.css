@@ -1,0 +1,18 @@
+/* Import the Ubuntu font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap');
+
+:root{
+    /* Define color variables */
+    --lightBlue: #007bff;
+    --orange: rgba(230, 230, 250, 1);
+    --yellow: rgba(0, 128, 128, 1);
+    --darkBlue: #000080;
+    --white: #FFFFFF;
+    --black: #333333;
+
+
+    /* Define font-family variable */
+    --font-family: 'Ubuntu', sans-serif;
+}
+
+/* @custom-media --mobile(max-width <= 400px); */

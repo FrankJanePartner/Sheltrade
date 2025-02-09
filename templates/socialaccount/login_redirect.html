@@ -1,0 +1,22 @@
+{% extends "../formBase.html" %}
+{% load socialaccount %}
+{% load allauth account %}
+{% load allauth i18n %}
+{% load static %}
+{% block title %}{% translate "Sign In" %} | {{ provider }}{% endblock%}
+{% block content %}
+    <meta http-equiv="refresh" content="0;URL='{{ redirect_to }}'" />
+    <div class="container socialSignIn">
+        <div class="topSection">
+            <a href="/dashboard/" class="back">&larr; Go Back</a>
+            <a href="/">
+                <img src="{% static 'core/image/logo.png' %}" alt="logo" class="logo">
+            </a>
+        </div>
+        <form method="post">
+            {% element p %}
+                <a href="{{ redirect_to }}">{% translate "Continue" %}</a>
+            {% endelement %}
+        </form>
+    </div>
+{% endblock %}

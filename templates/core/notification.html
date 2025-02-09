@@ -1,0 +1,26 @@
+{% extends "../formBase.html" %}
+{% load static %}
+{% block title %}Notifications{% endblock%}
+{% block content %}
+    <div class="container socialSignIn">
+        <div class="topSection">
+            <a href="/dashboard/" class="back">&larr; Go Back</a>
+            <a href="/">
+                <img src="{% static 'core/image/Logo.png' %}" alt="logo" class="logo">
+            </a>
+        </div>
+        <div class="formHeader">
+            <h1>Notifications</h1>
+        </div>
+        
+        <section>
+            <p>You have no new notification</p>
+            <div class="note" style="display:none; border-bottom: 2px solid white;">
+                <h4>Noted 1</h4>
+                <p>
+                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Id velit deserunt consequuntur ratione debitis doloribus excepturi eum? Voluptates sint ullam magnam quasi expedita non illo cupiditate unde laboriosam inventore aliquam sequi nam dolores odit animi ea recusandae corporis, consequuntur, ipsum hic quod reprehenderit iure porro placeat. Assumenda esse iste rerum, adipisci perspiciatis exercitationem, in accusantium sunt labore, saepe reprehenderit corporis aliquid nulla eum consequatur aliquam architecto numquam maiores. Ullam, optio! Nostrum necessitatibus commodi animi enim fuga. Distinctio iste, culpa ipsam delectus nesciunt laborum fugiat quis temporibus exercitationem, consectetur, amet tenetur voluptatibus eius voluptates sed commodi ullam cum error repellendus ipsa?
+                </p>
+            </div>
+        </section>
+    </div>
+{% endblock %}

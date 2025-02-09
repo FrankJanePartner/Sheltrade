@@ -1,0 +1,10 @@
+from django.core.paginator import Paginator
+
+@login_required
+def market(request):
+    user = request.user
+    giftcards = GiftCard.objects.filter(seller=user)
+    paginator = Paginator(giftcards, 10)  # Show 10 gift cards per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'giftcard/market.html', {"page_obj": page_obj})

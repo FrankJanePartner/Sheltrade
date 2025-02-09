@@ -1,0 +1,37 @@
+{% extends "../formBase.html" %}
+{% load socialaccount %}
+{% load allauth account %}
+{% load allauth i18n %}
+{% load static %}
+{% block title %}Sign In{% endblock%}
+{% block content %}
+    <div class="container socialSignIn cmailcode">
+        <div class="formHeader">
+            <h1>Enter Sign-In Code</h1>
+        </div>
+        <form method="post" action="{% url 'account_confirm_login_code' %}">
+            {% csrf_token %}
+            <div class="formStartText">
+                <p>
+                    We’ve sent a code to 
+                    <a href="mailto:{{ email }}">{{ email }}</a>. The code expires shortly, so please enter it soon.
+                </p>
+            </div>
+            <!-- Custom form fields (instead of Django form tags) -->
+            <div class="form-group">
+                <label for="login_code">Sign-In Code</label>
+                <input type="text" id="login_code" name="login_code" required>
+            </div>
+            <!-- Optional redirect field if needed -->
+            {{ redirect_field }}
+            <button type="submit" class="prominent login">Sign In</button>
+        </form>
+
+        <form id="logout-from-stage" method="post" action="{% url 'account_logout' %}">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{% url 'account_login' %}">
+        </form>
+        
+        <button type="submit" form="logout-from-stage" class="link" style="margin-top: 1rem; padding: 0.5rem 2rem;">Cancel</button>
+    </div>
+{% endblock %}
