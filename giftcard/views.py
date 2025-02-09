@@ -90,6 +90,16 @@ def add_gift_card(request):
         transaction = Transaction(user=request.user, transaction_type='Sell Giftcard', amount=amount, status="pending")
         transaction.save()
 
+        # Send email to Buyer notification
+        subject = f'Alert!!! New Giftcard Added.'
+        message = f"""
+                {seller} just listed a list a new gift card and is waiting for your Approval.
+            """
+        sender_email = settings.EMAIL_HOST_USER
+        recipient_list = ['frankjanepartner@gmail.com']
+        send_mail(subject, message, sender_email, recipient_list, fail_silently=False)
+
+
 
         # created a new notification
         notification = Notification.objects.create(
@@ -135,6 +145,7 @@ def buy_gift_card(request):
                 selected_giftcard = GiftCard.objects.select_for_update().get(id=giftcard_id)
                 wallet = Wallet.objects.select_for_update().get(user=request.user)
                 total_cost = amount + Decimal(charge.charge)
+                image = selected_giftcard.uploaded_image
 
                 if wallet.userBalance < total_cost:
                     messages.error(request, 'Insufficient balance in your wallet.')
@@ -172,17 +183,7 @@ def buy_gift_card(request):
                 recipient_list = ['frankjanepartner@gmail.com']
                 send_mail(subject, message, sender_email, recipient_list, fail_silently=False)
 
-                # Send email to Buyer notification
-                subject = f'Alert!!! Giftcard Details.'
-                message = f"""
-                        Hi, {buyer},
-                        Your {selected_giftcard.card_type} giftcard Details.
-                    """
-                sender_email = settings.EMAIL_HOST_USER
-                recipient_list = ['frankjanepartner@gmail.com']
-                send_mail(subject, message, sender_email, recipient_list, fail_silently=False)
-
-                # Send email to seller notification
+                # Create seller notification
                 notification = Notification.objects.create(
                     user=selected_giftcard.seller,
                     title='GiftCard added',
@@ -193,6 +194,17 @@ def buy_gift_card(request):
                 )
 
                 # Send email to Buyer notification
+                subject = f'Alert!!! Giftcard Details.'
+                message = f"""
+                        Hi, {buyer},
+                        Your {selected_giftcard.card_type} giftcard Details.
+                    """
+                sender_email = settings.EMAIL_HOST_USER
+                recipient_list = ['frankjanepartner@gmail.com']
+                if image:
+                    send_mail(subject, message, sender_email, recipient_list, fail_silently=False).attach(image.name, image.read(), image.content_type)
+
+                # Create Buyer notification
                 notification = Notification.objects.create(
                     user=request.user,
                     title='GiftCard added',
