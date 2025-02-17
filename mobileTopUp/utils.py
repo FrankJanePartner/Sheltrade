@@ -8,8 +8,8 @@ from datetime import datetime
 import pytz
 
 API_KEY = "801ea9e2f2d9234d3437de7074ad4af6"
-PUBLIC_KEY = "PK_1308d86a660b71f64597ccb8f270255fd2d351c88ac"
-SECRET_KEY = "SK_7156ade0433533ed8d9fc07942ed18ba2aad86ff532"
+PUBLIC_KEY = "PK_3921bc1b243a21a3a8b490b75f0932bf0f1aaf349bb"
+SECRET_KEY = "SK_501457b076cb4065af6c13f236d716fca33aa432967"
 BASE_URL = "https://sandbox.vtpass.com/api/"
 
 class VTUAPI:

@@ -1,15 +1,18 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .utils import generate_narration
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Transaction, Wallet, DepositNarations, WithdrawalAccount, Withdrawal
 from sheltradeAdmin.models import BankDetail
-from core.models import Profile
+from core.models import Profile, Notification
 from django.contrib.auth.models import User
 from decimal import Decimal
-from django.shortcuts import redirect
-from django.core.mail import EmailMessage
+from django.core.mail import send_mail, EmailMultiAlternatives
 from django.conf import settings
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+
+admin_users = User.objects.filter(is_superuser=True)
 
 
 # Create your views here.
@@ -62,7 +65,7 @@ def deposit_submit_view(request):
 
         # Prepare the email content
         subject = 'Alert!!! New Deposit'
-        message = (
+        messageContent  = (
             f"Username: {request.user.username}\n"
             f"User's Email: {request.user.email}\n"
             f"Deposit Amount: {amount}\n"
@@ -70,26 +73,13 @@ def deposit_submit_view(request):
             f"Proof Of Payment: Attached below."
         )
         sender_email = settings.DEFAULT_FROM_EMAIL
-        recipient_list = ['partnermarvel55@gmail.com']
-
-        # Use EmailMessage for sending the email
-        email = EmailMessage(
-            subject=subject,
-            body=message,
-            from_email=sender_email,
-            to=recipient_list,
-        )
-
-        # Attach the proof of payment if it exists
-        if proof_of_payment:
-            email.attach(proof_of_payment.name, proof_of_payment.read(), proof_of_payment.content_type)
-
-        # Send the email
-        try:
-            email.send(fail_silently=False)
-            messages.success(request, 'Deposit sent! Awaiting approval.')
-        except Exception as e:
-            messages.error(request, f"Failed to send email: {e}")
+        recipient_list = [user.email for user in admin_users]
+        image = {proof_of_payment.read()}
+        html_content = render_to_string("email.html", {"messageContent": messageContent, "image": image})
+        text_content = strip_tags(html_content)
+        email = EmailMultiAlternatives(subject, text_content, sender_email, recipient_list)
+        email.attach_alternative(html_content, "text/html")
+        email.send()
             
         # send_mail(subject, message, sender_email, recipient_list, fail_silently=False)
 
@@ -118,6 +108,23 @@ def withdrawal_submit_view(request):
             withdrawal = Withdrawal(user=request.user, transaction_id=transaction, acount_name=withdrawal_account.account_name, acount_number=withdrawal_account.account_number, BankName=withdrawal_account.bank_name)
             withdrawal.save()
 
+            # Prepare the email content
+            subject = 'Alert!!! New Withdrawal'
+            messageContent = (
+                f"Username: {request.user.username}\n"
+                f"User's Email: {request.user.email}\n"
+                f"User's Email: {request.user.email}\n"
+                f"Proof Of Payment: Attached below."
+            )
+
+            sender_email = settings.DEFAULT_FROM_EMAIL
+            recipient_list = [user.email for user in admin_users]
+            html_content = render_to_string("email.html", {"messageContent": messageContent})
+            text_content = strip_tags(html_content)
+            email = EmailMultiAlternatives(subject, text_content, sender_email, recipient_list)
+            email.attach_alternative(html_content, "text/html")
+            email.send()
+            
             messages.success(request, f"Withdrawal processed from {withdrawal_account.account_name}.")
             return redirect('wallet:wallet')
             
@@ -129,12 +136,22 @@ def withdrawal_submit_view(request):
 @login_required
 def AddAccount(request):
     if request.method == 'POST':
+        user = request.user
         accountName = request.POST.get('accountName')
         bankName = request.POST.get('bankName')
         accountNumber = request.POST.get('accountNumber')
 
         address = WithdrawalAccount(user=request.user, account_name=accountName, account_number=accountNumber, bank_name=bankName)
         address.save()
+
+        # Send notification
+        Notification.objects.create(
+            user=user,
+            title='Added Account.',
+            content="""
+                Account added sucessfully.
+            """
+        )
         messages.info(request, 'Account added sucessfully.')
         return redirect('wallet:wallet')
     else:

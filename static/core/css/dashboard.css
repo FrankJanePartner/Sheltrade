@@ -65,8 +65,27 @@ body{
     position: relative;
 }
 
+        
+.firstSection .div .icons a{
+    text-decoration: none;
+    position: relative;
+}
+
 .firstSection .div i{
     color: white;
+}
+.firstSection .div .icons sup{
+    background-color: var(--darkBlue);
+    border: 1px solid white;
+    color: white;
+    padding: 0.15rem 0.3rem;
+    border-radius: 100%;
+    position: absolute;
+    top: -0.5rem;
+    right: -0.5rem;
+}
+.firstSection .div .icons sup sup{
+    display: none;
 }
 
 .firstSection .div i:hover{

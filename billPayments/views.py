@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from pprint import pprint as pp
 from .utils import VTUBILLSAPI, VT_EMAIL, VT_PASSWORD
 from wallet.models import Transaction, Wallet
+from core.models import Profile, Notification
 from sheltradeAdmin.models import CashBack
 from pprint import pprint as pp
 import random
@@ -15,6 +16,10 @@ from django.contrib.auth.decorators import login_required
 from decimal import Decimal
 from django.contrib import messages
 from django.db import transaction
+from django.core.mail import send_mail, EmailMultiAlternatives
+from django.conf import settings
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 
 # Initialize the VTUAPI with the necessary keys
 vtu_api =   VTUBILLSAPI(VT_EMAIL, VT_PASSWORD)
@@ -81,44 +86,54 @@ def subscribe_tv(request):
             return JsonResponse({'error': verify_response['error']}, status=400)
 
         # Step 2: Check the subscription type and make the appropriate API call
-        if subscription_type == "renew":
-            response = vtu_api.renewPlan(
-                request_id, service_id, billers_code, variation_code, amount, phone, subscription_type, 1
-            )
-            balance.userBalance -= (amount - cashBackRate)
-            balance.save()
-            Transaction.objects.create(
-                user=user,
-                transaction_type="Paid Cable bills",
-                amount=amount,
-                status="Approved"
-            )
-            messages.success(
-                request,
-                f"Paid Cable bills successfully! You have recieve a {cashBackObj}% CashBack"
-            )
-            return redirect('core:dashbord')  # URL name for success.html
-        elif subscription_type == "change":
-            response = vtu_api.changePlan(
-                request_id, service_id, billers_code, variation_code, amount, phone, subscription_type, 1
-            )
-            balance.userBalance -= (amount - cashBackRate)
-            balance.save()
-            Transaction.objects.create(
-                user=user,
-                transaction_type="Paid Cable bills",
-                amount=amount,
-                status="Approved"
-            )
-            messages.success(
-                request,
-                f"Paid Cable bills successfully! You have recieve a {cashBackObj}% CashBack"
-            )
-            return redirect('core:dashbord')  # URL name for success.html
-        else:
+        if subscription_type in ['renew', 'change']:
             return JsonResponse({'error': 'Invalid subscription type.'}, status=400)
-        
+        else:
+            if subscription_type == "renew":
+                response = vtu_api.renewPlan(
+                    request_id, service_id, billers_code, variation_code, amount, phone, subscription_type, 1
+                )
+            elif subscription_type == "change":
+                response = vtu_api.changePlan(
+                    request_id, service_id, billers_code, variation_code, amount, phone, subscription_type, 1
+                )
+            balance.userBalance -= (amount - cashBackRate)
+            balance.save()
+            Transaction.objects.create(
+                user=user,
+                transaction_type="Paid Cable bills",
+                amount=amount,
+                status="Approved"
+            )
 
+            # Send email to user
+            subject = f' Paid Cable bills.'
+            messageContent = f"""
+                    Hi, {user},
+                    Your Payment for {service_id} was successfull.
+                """
+            sender_email = settings.EMAIL_HOST_USER
+            recipient_list = [user.email]
+            html_content = render_to_string("email.html", {"messageContent": messageContent})
+            text_content = strip_tags(html_content)
+            email = EmailMultiAlternatives(subject, text_content, sender_email, recipient_list)
+            email.attach_alternative(html_content, "text/html")
+            email.send()
+
+            # Send notification
+            Notification.objects.create(
+                user=user,
+                title='Paid Cable bills',
+                content="""
+                    Your Payment for {service_id} was successfull.
+                """
+            )
+            messages.success(
+                request,
+                f"Paid Cable bills successfully! You have recieve a {cashBackObj}% CashBack"
+            )
+            return redirect('core:dashbord')  # URL name for success.html
+        
 @login_required
 def subs(request):
     return render(request, 'billPayment/subscriptions.html')
@@ -170,16 +185,14 @@ def pay_electricity(request):
             return JsonResponse({'error': verify_response['error']}, status=400)
 
         # Step 2: Make payment based on meter type
-        if meter_type == "prepaid":
-            response = vtu_api.prepaidMeter(
-                request_id, service_id, meter_number, "default", amount, phone
-            )
-        elif meter_type == "postpaid":
-            response = vtu_api.postpaidMeter(
-                request_id, service_id, meter_number, "default", amount, phone
-            )
-        else:
+        if meter_type in ['renew', 'change']:
             return JsonResponse({'error': 'Invalid meter type.'}, status=400)
+        else:
+            if meter_type == "prepaid":
+                response = vtu_api.prepaidMeter(request_id, service_id, meter_number, "default", amount, phone)
+            elif meter_type == "postpaid":
+                response = vtu_api.postpaidMeter(request_id, service_id, meter_number, "default", amount, phone)
+            
 
         # Check for payment errors
         if 'error' in response:
@@ -192,6 +205,28 @@ def pay_electricity(request):
             transaction_type="Paid Electricity bills",
             amount=amount,
             status="Approved"
+        )
+        # Send email to user
+        subject = f' Paid Cable bills.'
+        messageContent = f"""
+                Hi, {user},
+                Your Payment for {service_id} was successfull.
+            """
+        sender_email = settings.EMAIL_HOST_USER
+        recipient_list = [user.email]
+        html_content = render_to_string("email.html", {"messageContent": messageContent})
+        text_content = strip_tags(html_content)
+        email = EmailMultiAlternatives(subject, text_content, sender_email, recipient_list)
+        email.attach_alternative(html_content, "text/html")
+        email.send()
+
+        # Send notification
+        Notification.objects.create(
+            user=user,
+            title='Paid Paid Electricity bills',
+            content="""
+                Your Payment for {service_id} was successfull.
+            """
         )
         messages.success(
             request,

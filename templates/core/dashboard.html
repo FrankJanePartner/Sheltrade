@@ -51,21 +51,14 @@
         <section class="firstSection">
             <h2>Welcome, <span class="userName">{{ user.username }}</span></h2>
             <div class="div">
-                <span class="icons"  style="position: relative;">
-                    <div class="chatbox" style="top: 0; left: -70px;">
-                        <div class="chatbox__button">
-                            <button style="padding: 0; border: none; background: none;">
-                                <i class="fas fa-envelope" style="font-size: clamp(0.7rem, 3vw, 1.5rem);"></i>
-                            </button>
-                        </div>
-                    </div>
-        
+                <span class="icons" >
                     <a href="/notification/">
                         <i class="fas fa-bell"></i>
+                        <sup>{{ unread_count }}<sup>
                     </a>
                 </span>
                 <a href="/dashboard/">
-                    <img src="{% static 'core/image/Icon.png' %}" alt="logo" class="logo">
+                    <img src="{% static 'core/image/Icon white.png' %}" alt="logo" class="logo">
                 </a>
             </div>
         </section>

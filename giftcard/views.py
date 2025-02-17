@@ -13,9 +13,13 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.db import transaction as db_transaction
 from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMultiAlternatives
 from django.conf import settings
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 
-
+# Get all admin users
+admin_users = User.objects.filter(is_superuser=True)
 
 @login_required
 def buygiftcard(request):
@@ -96,7 +100,7 @@ def add_gift_card(request):
                 {seller} just listed a list a new gift card and is waiting for your Approval.
             """
         sender_email = settings.EMAIL_HOST_USER
-        recipient_list = ['frankjanepartner@gmail.com']
+        recipient_list = [user.email for user in admin_users]
         send_mail(subject, message, sender_email, recipient_list, fail_silently=False)
 
 
@@ -172,16 +176,21 @@ def buy_gift_card(request):
                 )
                 user_transaction.save()
 
-                # Send email to seller notification
-                subject = f'Alert!!! Giftcard Sold.'
-                message = f"""
+                # Send email to seller
+                subject = f' Alert!!! Giftcard Sold.'
+                messageContent = f"""
                         Hi, {selected_giftcard.seller},
                         Your {selected_giftcard.card_type} giftcard has been sold. Fund has been added to your wallet. Log into your account to see more.
-                        Thank you for using Shel-Trade. 
+                        Thank you for using Shel-Trade.
                     """
+                link = "market"
                 sender_email = settings.EMAIL_HOST_USER
-                recipient_list = ['frankjanepartner@gmail.com']
-                send_mail(subject, message, sender_email, recipient_list, fail_silently=False)
+                recipient_list = [selected_giftcard.seller.email]
+                html_content = render_to_string("email.html", {"messageContent": messageContent, "link": link})
+                text_content = strip_tags(html_content)
+                email = EmailMultiAlternatives(subject, text_content, sender_email, recipient_list)
+                email.attach_alternative(html_content, "text/html")
+                email.send()
 
                 # Create seller notification
                 notification = Notification.objects.create(
@@ -193,16 +202,28 @@ def buy_gift_card(request):
                     """
                 )
 
-                # Send email to Buyer notification
-                subject = f'Alert!!! Giftcard Details.'
-                message = f"""
+                # Send email to Buyer
+                subject = f' Alert!!! Giftcard Sold.'
+                messageContent = f"""
                         Hi, {buyer},
-                        Your {selected_giftcard.card_type} giftcard Details.
+                        Your {selected_giftcard.card_type} giftcard Details
+                        card_type = {selected_giftcard.card_type}
+                        card_number = {selected_giftcard.card_number}
+                        card_pin = {selected_giftcard.card_pin }
+                        card_code = {selected_giftcard.card_code}
+                        expiration_date = {selected_giftcard.expiration_date}
+                        condition = {selected_giftcard.condition}
+                        restrictions = {selected_giftcard.restrictions}
+                        price ={selected_giftcard.price}
                     """
+                image = {selected_giftcard.uploaded_imagecard_type.read()}
                 sender_email = settings.EMAIL_HOST_USER
-                recipient_list = ['frankjanepartner@gmail.com']
-                if image:
-                    send_mail(subject, message, sender_email, recipient_list, fail_silently=False).attach(image.name, image.read(), image.content_type)
+                recipient_list = [request.user.email]
+                html_content = render_to_string("email.html", {"messageContent": messageContent, "image": image})
+                text_content = strip_tags(html_content)
+                email = EmailMultiAlternatives(subject, text_content, sender_email, recipient_list)
+                email.attach_alternative(html_content, "text/html")
+                email.send()
 
                 # Create Buyer notification
                 notification = Notification.objects.create(

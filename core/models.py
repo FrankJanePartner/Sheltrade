@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
+from django.urls import reverse
 
 # Create your models here.
 class Profile(models.Model):
@@ -19,14 +20,24 @@ class Profile(models.Model):
 class Notification(models.Model):
     user = models.ForeignKey(User, related_name='notification', on_delete=models.CASCADE)
     title = models.CharField(max_length = 150)
+    slug = models.SlugField(max_length=20, blank=True)
     content = models.TextField()
     is_read = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now=False, auto_now_add=False)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
     
     class Meta:
         verbose_name = 'Notification'
         verbose_name_plural = 'Notifications'
+        ordering = ['-created_at']  # Show newest notifications first
 
     def __str__(self):
-        return f"{self.title}"
+        return f"{self.user}:  {self.title} - {'Read' if self.is_read else 'Unread'}"
     
+    def get_absolute_url(self):
+        return reverse('core:notification_detail', args=[self.slug])
+
+    def mark_as_read(self):
+        """Marks the notification as read and saves it."""
+        if not self.is_read:
+            self.is_read = True
+            self.save()

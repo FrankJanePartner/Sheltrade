@@ -8,7 +8,9 @@ from django.db import transaction
 from .utils import VTUAPI, API_KEY, PUBLIC_KEY, SECRET_KEY
 from wallet.models import Transaction, Wallet
 from sheltradeAdmin.models import CashBack
-from core.models import Profile
+from core.models import Profile, Notification
+from django.core.mail import send_mail
+from django.conf import settings
 
 # Initialize the VTU API
 vtu_api = VTUAPI(API_KEY, PUBLIC_KEY, SECRET_KEY)
@@ -34,6 +36,7 @@ def buyairtime(request):
     error_message = None
 
     if request.method == 'POST':
+        user = request.user
         network = request.POST.get('network')
         phone_number = request.POST.get('phone-number')
         amount = request.POST.get('amount')
@@ -73,6 +76,26 @@ def buyairtime(request):
                         transaction_type="Buy Airtime",
                         amount=amount,
                         status="Approved"
+                    )
+                    # Send email to user
+                    subject = f'Buy Airtime.'
+                    message = f"""
+                            Hi, {user},
+                            Your airtime of {currency}{amount} was successfull.
+                        """
+                    sender_email = settings.EMAIL_HOST_USER
+                    recipient_list = [user.email]
+                    send_mail(subject, message, sender_email, recipient_list, fail_silently=False)
+
+                            
+                    # Send notification
+                    Notification.objects.create(
+                        user=user,
+                        title='Buy Airtime.',
+                        content="""
+                            Hi, {user},
+                            Your airtime of {currency}{amount} was successfull.
+                        """
                     )
                     messages.success(
                         request,
@@ -142,6 +165,27 @@ def buydata(request):
                         transaction_type="Buy Data",
                         amount=amount,
                         status="Approved"
+                    )
+                    
+                    # Send email to user
+                    subject = f'Buy Data'
+                    message = f"""
+                            Hi, {user},
+                            Your data plan of {variation_code } for {currency}{amount} was successfull.
+                        """
+                    sender_email = settings.EMAIL_HOST_USER
+                    recipient_list = [settings.EMAIL_HOST_USER]
+                    send_mail(subject, message, sender_email, recipient_list, fail_silently=False)
+
+                            
+                    # Send notification
+                    Notification.objects.create(
+                        user=user,
+                        title='Buy Data',
+                        content="""
+                                Hi, {user},
+                                Your data plan of {variation_code } for {currency}{amount} was successfull.
+                            """
                     )
                     messages.success(
                         request,
